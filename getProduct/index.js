@@ -69,6 +69,15 @@ module.exports = async function (context, req) {
 
     const product = (req.query.product || (req.body && req.body.product))
     const responseMessage = products[product.substring(1)]
+    
+    // Check if product parameter is valid
+    if (product.substring(0, 1) !== "P" || product.substring(1) > products.length - 1) {
+        context.res = {
+            status: 400,
+            body: { msg: "Invalid product parameter.", param: product }
+        }
+        return
+    }
 
     context.res = {
         headers: {"Content-Type": "application/json"},
