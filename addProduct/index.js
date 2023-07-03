@@ -28,7 +28,13 @@ module.exports = async function (context, req) {
         const result = await collection.insertOne(product)
         context.res = {
             status: 201,
-            body: {msg: `Product successfully added to the database.`}
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: {
+                msg: `Product successfully added to the database.`,
+                _id: result.insertedId
+            }
         }
     } catch (error) {
         context.res = {

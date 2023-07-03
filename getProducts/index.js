@@ -1,73 +1,38 @@
+const {MongoClient} = require("mongodb")
+
 module.exports = async function (context, req) {
 
-    let products = [
-        {
-            "angle": "12",
-            "led": [
-                "black",
-                "black",
-                "black",
-                "black",
-                "black",
-                "black"
-            ],
-            "display": [
-                "Pause",
-                "",
-                "Scan product"
-            ]
-        },
-        {
-            "angle": "34",
-            "led": [
-                "blue",
-                "green",
-                "green",
-                "green",
-                "green",
-                "blue"
-            ],
-            "display": [
-                "DiFlexx",
-                "Distance: 20 m",
-                "Heigth:   50 cm"
-            ]
-        },
-        {
-            "angle": "12",
-            "led": [
-                "black",
-                "black",
-                "green",
-                "green",
-                "black",
-                "black"
-            ],
-            "display": [
-                "Mateno",
-                "Distance: 12 m",
-                "Heigth:   25 cm"
-            ]
-        },
-        {
-            "angle": "12",
-            "led": [
-                "black",
-                "green",
-                "green",
-                "green",
-                "green",
-                "black"
-            ],
-            "display": [
-                "Decis Pro",
-                "Distance: 10 m",
-                "Heigth:   15 cm"
-            ]
+    // Import MongoDB
+    const url = 'mongodb://mongo:VjHvECefgmUbvyapJ926@containers-us-west-195.railway.app:7647'
+    const dbName = 'traktor'
+
+    try {
+        // Connect to MongoDB
+        const client = await MongoClient.connect(url)
+
+        // Select the database
+        const db = client.db(dbName)
+
+        // Get the "products" collection
+        const collection = db.collection('products')
+
+        // Find all documents in the collection
+        const documents = await collection.find({}).toArray()
+
+        // Close the MongoDB connection
+        client.close()
+
+        context.res = {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: documents
         }
-    ]
-    context.res = {
-        headers: {"Content-Type": "application/json"},
-        body: products
+    } catch (error) {
+        context.res = {
+            status: 500,
+            body: 'Error occurred while retrieving data: ' + error.message
+        }
     }
 }

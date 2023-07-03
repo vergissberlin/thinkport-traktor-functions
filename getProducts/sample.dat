@@ -1,3 +1,17 @@
 {
-    "name": "Azure"
+    "name": "Sample",
+    "angle": "144",
+    "led": [
+        "black",
+        "black",
+        "red",
+        "red",
+        "black",
+        "black"
+    ],
+    "display": [
+        "Sample",
+        "Distance 30m",
+        "Height 12cm"
+    ]
 }
